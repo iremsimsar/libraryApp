@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "alwaysStrict": true,
+        "noUnusedParameters": true,
+        "baseUrl": ".",
+        "noUnusedLocals":true,
+        "useUnknownInCatchVariables": true
+    },
+    "types": [
+        "node",
+        "jest",
+        "fastify"
+    ],
+    "files": [
+        "src/**/*.ts",
+        "src/*.ts",
+        "src/**/*.json"
+    ]
+}
