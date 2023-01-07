@@ -1,12 +1,12 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify";
-// import typeDefs from "./graphql/typedef/query/index";
-// import resolvers from "./graphql/resolver";
-// import { ApolloServer } from "apollo-server-fastify";
-// import {
-//     ApolloServerPluginLandingPageLocalDefault,
-//     ApolloServerPluginDrainHttpServer
-// } from "apollo-server-core";
-// import GraphError from "./helper/error/graphError";
+import typeDefs from "./graphql/typedef";
+import resolvers from "./graphql/resolver";
+import { ApolloServer } from "apollo-server-fastify";
+import {
+    ApolloServerPluginLandingPageLocalDefault,
+    ApolloServerPluginDrainHttpServer
+} from "apollo-server-core";
+import GraphError from "./helper/error/graphError";
 import i18n from './config/i18nConfig'
 import { dbConnect } from "./config/dbConfig";
 
@@ -16,17 +16,17 @@ export default class BuildServer {
 
         const fastifyServer = fastify();
 
-        // const apollo: any = new ApolloServer({
-        //     typeDefs,
-        //     resolvers,
-        //     csrfPrevention: true,
-        //     plugins: [
-        //         ApolloServerPluginLandingPageLocalDefault({}),
-        //         ApolloServerPluginDrainHttpServer({ httpServer: fastifyServer.server }),
-        //     ],
-        //     context: ({ request }: { request: FastifyRequest }) => { return request.headers.authorization?.split(' ')?.[1]; },
-        //     formatError: (error) => { return GraphError.formatError(error); }
-        // });
+        const apollo: any = new ApolloServer({
+            typeDefs,
+            resolvers,
+            csrfPrevention: true,
+            plugins: [
+                ApolloServerPluginLandingPageLocalDefault({}),
+                ApolloServerPluginDrainHttpServer({ httpServer: fastifyServer.server }),
+            ],
+            context: ({ request }: { request: FastifyRequest }) => { return request.headers.authorization?.split(' ')?.[1]; },
+            formatError: (error) => { return GraphError.formatError(error); }
+        });
 
 
        fastifyServer.register(dbConnect)
@@ -36,10 +36,10 @@ export default class BuildServer {
             done()
         })
 
-        // await apollo.start();
+        await apollo.start();
 
         return fastifyServer
-            // .register(apollo.createHandler())
+            .register(apollo.createHandler())
             .setErrorHandler((error, _request, reply) => {
                 console.error(error);
                 reply.code(500).send({ message: error.message });

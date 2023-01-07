@@ -24,9 +24,11 @@
     "apollo-server-fastify": "^3.11.1",
     "dotenv": "^16.0.3",
     "fastify": "^3.17.0",
+    "graphql-bigint": "^1.0.0",
     "i18n": "^0.15.1"
   },
   "devDependencies": {
+    "@types/graphql-bigint": "^1.0.0",
     "@types/i18n": "^0.13.6",
     "@types/node": "^18.11.18",
     "prisma": "^4.8.1",

@@ -1,17 +1,8 @@
 import { Book } from "../../../dto/bookDto"
 import BookService from "../../../service/bookService"
 
-export default class BuildingResolvers {
-
-  public static getBookById(_parent: {}, args: { id: number })
-    : Promise<Book> {
-
-    return BuildingService.getBuildingById(args.id);
-  }
-
-  public static getIndependentZonesByBuildingId(_parent: {}, args: { buildingId: number })
-    : Promise<IndependentZone[]> {
-
-    return IndependentZoneService.getIndependentZonesByBuildingId(args.buildingId)
+export default class BookResolver {
+  public static createBook(_parents: {}, args: {book: Book}): Promise<Book> {
+    return BookService.createBook(args.book);
   }
 }

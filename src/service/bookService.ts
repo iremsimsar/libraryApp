@@ -1,54 +1,22 @@
+import { db } from "../config/dbConfig";
+import BookConvertor from "../convertor/bookConvertor";
+import { Book } from "../dto/bookDto";
+
 export default class BookService {
 
-    public static getBookById(id: number): Promise<Book> {
-        return new Promise((resolve, reject) => {
-            BookModel.findById(id
-                , (error, book) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(book);
-                }
-            );
-        });
-    }
+    public static async createBook(book: Book): Promise<Book> {
+        console.log(book)
+        const result = await db.book.create({
+            data: {
+                name: book.name,
+                author: book.author,
+                price: book.price,
+                stock: book.stock,
+                createdAt: book.createdAt,
+                updatedAt: book.updatedAt
+            }
+        })
 
-    public static getBooks(): Promise<Book[]> {
-        return new Promise((resolve, reject) => {
-            BookModel.find({}, (error, books) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(books);
-            });
-        });
-    }
-
-    public static createBook(book: Book): Promise<Book> {
-        return new Promise((resolve, reject) => {
-            BookModel.create(book, (error, createdBook) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(createdBook);
-            });
-        });
-    }
-
-    public static updateBook(book: Book): Promise<Book> {
-        return new Promise((resolve, reject) => {
-            BookModel.findOneAndUpdate
-                (
-                    { _id: book.id },
-                    book,
-                    { new: true },
-                    (error, updatedBook) => {
-                        if (error) {
-                            reject(error);
-                        }
-                        resolve(updatedBook);
-                    }
-                );
-        });
+        return BookConvertor.toDto(result);
     }
 }
