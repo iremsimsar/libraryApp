@@ -8,6 +8,17 @@ export interface Book {
     updatedAt: Date;
 }
 
+interface Pagination {
+    total: number;
+    page: number;
+    size: number;
+}
+
+export interface BookWithPagination {
+    data: Book[];
+    pagination: Pagination;
+}
+
 export default class BookDto implements Book {
 
     public id: number;
@@ -24,11 +35,8 @@ export default class BookDto implements Book {
         this.author = data.author;
         this.price = data.price;
         this.stock = data.stock;
-        this.createdAt = data.createdAt;
-        this.updatedAt = data.updatedAt;
+        this.createdAt = new Date(data.createdAt);
+        this.updatedAt = new Date(data.updatedAt);
     }
 
-    public static fromJson(data: Book): BookDto {
-        return new BookDto(data);
-    }
 }

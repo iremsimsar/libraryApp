@@ -1,5 +1,5 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify";
-import typeDefs from "./graphql/typedef";
+import typeDefs from "./graphql/typedef/bookTypedef";
 import resolvers from "./graphql/resolver";
 import { ApolloServer } from "apollo-server-fastify";
 import {
@@ -21,18 +21,16 @@ export default class BuildServer {
             resolvers,
             csrfPrevention: true,
             plugins: [
-                ApolloServerPluginLandingPageLocalDefault({}),
+                ApolloServerPluginLandingPageLocalDefault({ embed: true }),
                 ApolloServerPluginDrainHttpServer({ httpServer: fastifyServer.server }),
             ],
-            context: ({ request }: { request: FastifyRequest }) => { return request.headers.authorization?.split(' ')?.[1]; },
             formatError: (error) => { return GraphError.formatError(error); }
         });
 
+        fastifyServer.register(dbConnect)
 
-       fastifyServer.register(dbConnect)
-
-        fastifyServer.addHook('onRequest', (req: FastifyRequest, _res: FastifyReply, done) => {
-            i18n.setLocale(req.headers['accept-language'] || 'tr')
+        fastifyServer.addHook('onRequest', (request: FastifyRequest, _reply: FastifyReply, done) => {
+            i18n.setLocale(request.headers['accept-language'] || 'tr')
             done()
         })
 
@@ -40,7 +38,7 @@ export default class BuildServer {
 
         return fastifyServer
             .register(apollo.createHandler())
-            .setErrorHandler((error, _request, reply) => {
+            .setErrorHandler((error: Error, _request: FastifyRequest, reply: FastifyReply) => {
                 console.error(error);
                 reply.code(500).send({ message: error.message });
             });

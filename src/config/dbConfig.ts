@@ -9,7 +9,7 @@ export const dbConnect = async () => {
     })
     return await db.$connect().then(() => {
         console.log("Database connected")
-    }).catch((err) => {
+    }).catch((err: Error) => {
         console.log(err)
         process.exit(1)
     })

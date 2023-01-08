@@ -14,11 +14,22 @@ export default gql`
         updatedAt: BigInt
     }
 
+    type BookWithPagination {
+        data: [Book]
+        pagination: Pagination
+    }
+
+    type Pagination {
+        total: Int
+        page: Int
+        size: Int
+    }
+
     input BookInput {
-        name: String
-        author: String
-        price: Float
-        stock: Int
+        name: String!
+        author: String!
+        price: Float!
+        stock: Int!
     }
 
 `

@@ -1,12 +1,25 @@
 version: '3.1'
 
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
     ports:
       - 5432:5432
     environment:
+      POSTGRES_DB: bookshelf
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123*
-      POSTGRES_DB: bookshelf
+
+  bookshelf:
+    image: node:16-alpine
+    working_dir: /src
+    environment:
+      - PORT=3000
+      - DB_CONNECTION_URI=postgresql://admin:admin123*@db:5432/bookshelf
+      - LOG_LEVEL=debug
+      
+    ports:
+      - 3000:3000
+    command: >
+      /bin/sh -c "copy . . yarn install && npm i ts-node -g && npm i pino-pretty -g && node ./server.ts"

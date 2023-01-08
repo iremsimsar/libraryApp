@@ -1,7 +1,13 @@
-import BookResolver from "./mutation/bookResolver";
+import BookResolver from "./bookResolver";
 
 export default {
     Mutation: {
-        createBook: BookResolver.createBook
+        createBook: BookResolver.createBook,
+        updateBook: BookResolver.updateBook,
+        deleteBook: BookResolver.deleteBook
+    },
+    Query: {
+        getBookById: BookResolver.getBook,
+        getAllBooks: BookResolver.getAllBooks
     }
 };
